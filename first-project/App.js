@@ -1,23 +1,49 @@
-import React from "react";
-import { Text, View, StyleSheet, Image, Button, ToastAndroid, TouchableOpacity} from 'react-native'
+import React, { useState } from "react";
+import { Text, 
+  View, 
+  StyleSheet, 
+  Image, 
+  ToastAndroid, 
+  TouchableOpacity, 
+  Alert } from 'react-native'
 import cubeImage from './res/black-cube.png';
+import * as ImagePicker from 'expo-image-picker';
+
+const uriImage = "https://picsum.photos/150/150";
 
 const App = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  let openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera is required");
+      return;
+    }
+
+    const pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+    if (pickerResult === true) return;
+
+    setSelectedImage({ localUri: pickerResult.uri });
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-          Hola usuario
+        Hola usuario
       </Text>
 
-      <Image source={cubeImage}
-        style={styles.image}/>
+      <Image source={{ uri: selectedImage !== null ? selectedImage.localUri : uriImage}}
+        style={styles.image} />
 
       <TouchableOpacity
         style={styles.button}
-        onPress={actionButtonIngresar}>
-          <Text style={styles.buttonText}>
-            Ingresar
-          </Text>
+        onPress={openImagePickerAsync}>
+        <Text style={styles.buttonText}>
+          Cambiar
+        </Text>
       </TouchableOpacity>
     </View>)
 }
@@ -28,11 +54,11 @@ const actionButtonIngresar = () => {
 
 const styles = StyleSheet.create({
   container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "crimson"
-    },
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "crimson"
+  },
   title: {
     fontSize: 42,
     color: "#FFFF"
@@ -40,13 +66,14 @@ const styles = StyleSheet.create({
   image: {
     height: 150,
     width: 150,
-    margin: 25
+    margin: 25,
   },
   button: {
     backgroundColor: "black",
     paddingVertical: 10,
     paddingHorizontal: 40
   },
-  buttonText: {color: "white", fontSize: 25}
+  buttonText: { color: "white", fontSize: 25 }
 })
+
 export default App;
