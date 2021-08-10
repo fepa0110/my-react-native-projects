@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { Text, 
-  View, 
-  StyleSheet, 
-  Image, 
-  ToastAndroid, 
-  TouchableOpacity, 
-  Alert } from 'react-native'
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  ToastAndroid,
+  TouchableOpacity,
+  Alert,
+  Platform
+} from 'react-native'
 import cubeImage from './res/black-cube.png';
 import * as ImagePicker from 'expo-image-picker';
+import * as Sharing from 'expo-sharing';
+import uploadToAnonymousFiles from 'anonymous-files';
 
 const uriImage = "https://picsum.photos/150/150";
 
@@ -24,9 +29,23 @@ const App = () => {
 
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
 
-    if (pickerResult === true) return;
+    if (pickerResult.cancelled === true) return;
 
-    setSelectedImage({ localUri: pickerResult.uri });
+    if(Platform.OS === "web"){
+      const remoteUri = await uploadToAnonymousFiles(pickerResult.uri);
+      setSelectedImage({localUri: pickerResult.uri, remoteUri: remoteUri});
+      console.log(selectedImage.remoteUri);
+    }
+    else setSelectedImage({ localUri: pickerResult.uri });
+  }
+
+  const openShareDialog = async() => {
+    if(!(await Sharing.isAvailableAsync())){
+      alert(`La imagen esta disponible en: ${selectedImage.remoteUri !== null ? selectedImage.remoteUri : ""}`);
+      return;
+    }
+
+    await Sharing.shareAsync(selectedImage.localUri);
   }
 
   return (
@@ -34,18 +53,21 @@ const App = () => {
       <Text style={styles.title}>
         Hola usuario
       </Text>
-
-      <Image source={{ uri: selectedImage !== null ? selectedImage.localUri : uriImage}}
-        style={styles.image} />
+      <TouchableOpacity onPress={openImagePickerAsync}>
+        <Image source={{ uri: selectedImage !== null ? selectedImage.localUri : uriImage }}
+          style={styles.image}/>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={openImagePickerAsync}>
+        onPress={openShareDialog}
+        >
         <Text style={styles.buttonText}>
-          Cambiar
+          Compartir
         </Text>
       </TouchableOpacity>
-    </View>)
+    </View>
+  )
 }
 
 const actionButtonIngresar = () => {

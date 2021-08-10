@@ -1,0 +1,47 @@
+[
+    {
+        "nombre": "Juntada sabado",
+        "descripcion": "",
+        "estado": "Activa"
+    },
+    {
+        "nombre": "Hartmann, Gerlach and Rath",
+        "descripcion": "",
+        "estado": "Finalizada"
+    },
+    {
+        "nombre": "Brown Inc",
+        "descripcion": "",
+        "estado": "Activa"
+    },
+    {
+        "nombre": "Blick, Strosin and Reinger",
+        "descripcion": "",
+        "estado": "Activa"
+    },
+    {
+        "nombre": "Reichel - Walsh",
+        "descripcion": "",
+        "estado": "Finalizada"
+    },
+    {
+        "nombre": "Jacobi LLC",
+        "descripcion": "",
+        "estado": "Activa"
+    },
+    {
+        "nombre": "Dibbert - McGlynn",
+        "descripcion": "",
+        "estado": "Finalizada"
+    },
+    {
+        "nombre": "Schaefer LLC",
+        "descripcion": "",
+        "estado": "Activa"
+    },
+    {
+        "nombre": "Lehner, Hodkiewicz and Kertzmann",
+        "descripcion": "",
+        "estado": "Activa"
+    }
+]
